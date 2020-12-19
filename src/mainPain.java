@@ -9,12 +9,14 @@ import java.util.Scanner;
 
 public class mainPain {
     public static void main(String[] args) {
-        try (Socket socket = new Socket("www.google.com", 80)) {
+        System.out.println("Введите адрес сайта");
+        String url=new Scanner(System.in).nextLine();
+        try (Socket socket = new Socket(url, 80)) {
             OutputStream outputStream = socket.getOutputStream();
-            outputStream.write(("GET / HTTP/1.1\r\nHost:www.google.com\n" +
-                    "Connection: keep-alive\r\n\r\n").getBytes());
+            outputStream.write((String.format("GET / HTTP/1.1\r\nHost:%s\n" +
+                    "Connection: keep-alive\r\n\r\n",url )).getBytes());
             outputStream.flush();
-            String fileName = "wiki.html";
+            String fileName = String.format("%s.html",url);
             try {
                 Files.createFile(Path.of(fileName));
             } catch (FileAlreadyExistsException e) {
